@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Repo Enhancement Swarm Config Schema",
+  "type": "object",
+  "properties": {
+    "general": {
+      "type": "object",
+      "properties": {
+        "supervisor": {"type": "string"},
+        "repo_url": {"type":"string"},
+        "repo_branch": {"type":"string"},
+        "languages": {
+          "type":"array",
+          "items":{"type":"string"},
+          "description":"Primary target languages (e.g., 'typescript','python','rust')"
+        },
+        "global_reach": {
+          "type":"object",
+          "properties": {
+            "locales": {"type":"array","items":{"type":"string"}},
+            "priority_markets": {"type":"array","items":{"type":"string"}}
+          }
+        },
+        "business_objective": {"type":"string","description":"One-line objective summary"},
+        "allowed_providers": {"type":"array","items":{"type":"string"},"description":"Allowed LLM providers (e.g. gemini, chatgpt, grok)"}
+      },
+      "required":["supervisor","repo_url"]
+    },
+    "scope_limits": {
+      "type":"object",
+      "properties": {
+        "max_files_touched": {"type":"integer","minimum":1,"default":50},
+        "max_lines_change_per_tick": {"type":"integer","default":500},
+        "max_concurrent_jobs": {"type":"integer","default":4},
+        "allowed_paths": {"type":"array","items":{"type":"string"},"description":"globs to include"},
+        "excluded_paths": {"type":"array","items":{"type":"string"}}
+      }
+    },
+    "objectives": {
+      "type":"object",
+      "properties": {
+        "fitness_weights": {
+          "type":"object",
+          "properties": {
+            "correctness":{"type":"number","default":0.30},
+            "security":{"type":"number","default":0.20},
+            "performance":{"type":"number","default":0.12},
+            "maintainability":{"type":"number","default":0.10},
+            "ux":{"type":"number","default":0.10},
+            "archScore":{"type":"number","default":0.18}
+          }
+        },
+        "novelty_bonus":{"type":"number","default":0.05},
+        "hard_constraints":{
+          "type":"object",
+          "properties":{
+            "min_correctness":{"type":"number","default":20},
+            "min_security":{"type":"number","default":15},
+            "max_population":{"type":"integer","default":12}
+          }
+        },
+        "soft_objectives":{
+          "type":"object",
+          "properties":{
+            "performanceFocus":{"type":"integer","minimum":0,"maximum":100,"default":30},
+            "modularityFocus":{"type":"integer","minimum":0,"maximum":100,"default":30},
+            "algorithmFocus":{"type":"integer","minimum":0,"maximum":100,"default":20},
+            "securityFocus":{"type":"integer","minimum":0,"maximum":100,"default":20}
+          }
+        }
+      }
+    },
+    "resource_limits":{
+      "type":"object",
+      "properties":{
+        "swarm_limits": {
+            "type": "object",
+            "properties": {
+                "max_cpu_cores":{"type":"integer","default":8},
+                "max_memory_gb":{"type":"number","default":32},
+                "max_disk_gb":{"type":"number","default":50},
+                "max_tokens_per_request":{"type":"integer","default":16000}
+            }
+        },
+        "target_environment": {
+            "type": "object",
+            "properties": {
+                "platform": {"type": "string"},
+                "runtime": {"type": "string"},
+                "constraints": {"type": "string"},
+                "scaling_strategy": {"type": "string"}
+            }
+        }
+      }
+    },
+    "advanced": {
+        "type": "object",
+        "properties": {
+            "min_structural_percent": {"type": "number", "default": 0.30},
+            "optimal_module_lines": {"type": "integer", "default": 300},
+            "size_penalty_weight": {"type": "number", "default": 0.05},
+            "eval_delay_ticks": {"type": "integer", "default": 3}
+        }
+    },
+    "safety_and_governance":{
+      "type":"object",
+      "properties":{
+        "human_approval_required":{"type":"boolean","default":true},
+        "evolution_core_edit_policy":{
+          "type":"object",
+          "properties":{
+            "consensus_required": {"type":"integer","default":2},
+            "allow_unchecked_edits": {"type":"boolean","default":false}
+          }
+        },
+        "sensitive_file_globs": {"type":"array","items":{"type":"string"}}
+      }
+    },
+    "reporting":{
+      "type":"object",
+      "properties":{
+        "report_frequency_minutes":{"type":"integer","default":60},
+        "artifact_store":{"type":"string","default":".evo/artifacts"},
+        "alert_thresholds":{"type":"object"}
+      }
+    }
+  },
+  "required":["general","objectives","resource_limits","safety_and_governance"]
+}

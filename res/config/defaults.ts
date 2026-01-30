@@ -1,0 +1,81 @@
+export const defaults = {
+  "general": {
+    "supervisor": "Admin User",
+    "repo_url": "https://github.com/example/target-repo.git",
+    "repo_branch": "main",
+    "languages": ["typescript", "python"],
+    "global_reach": {
+      "locales": ["en-US"],
+      "priority_markets": ["global"]
+    },
+    "business_objective": "Improve modularity and test coverage while reducing technical debt.",
+    "allowed_providers": ["gemini", "openai"]
+  },
+  "scope_limits": {
+    "max_files_touched": 50,
+    "max_lines_change_per_tick": 500,
+    "max_concurrent_jobs": 4,
+    "allowed_paths": ["src/**/*", "lib/**/*"],
+    "excluded_paths": ["node_modules", "dist", ".git"]
+  },
+  "objectives": {
+    "fitness_weights": {
+      "correctness": 0.30,
+      "security": 0.20,
+      "performance": 0.12,
+      "maintainability": 0.10,
+      "ux": 0.10,
+      "archScore": 0.18
+    },
+    "novelty_bonus": 0.05,
+    "hard_constraints": {
+      "min_correctness": 20,
+      "min_security": 15,
+      "max_population": 12
+    },
+    "soft_objectives": {
+      "performanceFocus": 30,
+      "modularityFocus": 30,
+      "algorithmFocus": 20,
+      "securityFocus": 20
+    }
+  },
+  "resource_limits": {
+    "swarm_limits": {
+        "max_cpu_cores": 8,
+        "max_memory_gb": 32,
+        "max_disk_gb": 50,
+        "max_tokens_per_request": 16000
+    },
+    "target_environment": {
+        "platform": "kubernetes",
+        "runtime": "node20",
+        "constraints": "low-memory-footprint",
+        "scaling_strategy": "horizontal"
+    }
+  },
+  "advanced": {
+    "min_structural_percent": 0.30,
+    "optimal_module_lines": 300,
+    "size_penalty_weight": 0.05,
+    "eval_delay_ticks": 3
+  },
+  "safety_and_governance": {
+    "human_approval_required": true,
+    "evolution_core_edit_policy": {
+      "consensus_required": 2,
+      "allow_unchecked_edits": false
+    },
+    "sensitive_file_globs": ["**/.env", "**/secrets.*", "config/prod.*"]
+  },
+  "reporting": {
+    "report_frequency_minutes": 60,
+    "artifact_store": ".evo/artifacts",
+    "alert_thresholds": {
+      "fitness_drop_percent": 10,
+      "security_critical_count": 0
+    }
+  }
+};
+
+export default defaults;
